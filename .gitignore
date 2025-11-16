@@ -1,0 +1,55 @@
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+
+# NuGet
+*.nupkg
+project.lock.json
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Rider
+.idea/
+*.sln.iml
+
+# ASP.NET Core
+appsettings.*.json
+appsettings.Development.json
+
+# Entity Framework
+Migrations/
+
+# Logs
+*.log
+
+# Node / Frontend
+Frontend/node_modules/
+Frontend/build/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log
+
+# Env files
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
