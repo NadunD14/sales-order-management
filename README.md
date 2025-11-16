@@ -120,150 +120,102 @@ REACT_APP_API_URL=http://localhost:5000/api
 ```powershell
 # Start the React development server
 npm start
+# Sales Order Management
+
+A full-stack web app for managing sales orders with a .NET 8 Web API backend and a React 18 frontend. Data persists in a local SQLite database using Entity Framework Core migrations.
+
+## Tech Stack
+
+- Backend: .NET 8, ASP.NET Core Web API, EF Core (SQLite), AutoMapper
+- Frontend: React 18, Redux Toolkit, React Router, Tailwind CSS, Axios
+- Architecture: Clean Architecture (API, Application, Domain, Infrastructure)
+
+## Project Structure
+
+```
+SalesOrderManagement/
+├── Backend/
+│   ├── SalesOrderManagement.API/            # Web API (controllers, startup)
+│   ├── SalesOrderManagement.Application/    # Services, DTOs, interfaces
+│   ├── SalesOrderManagement.Domain/         # Entities and domain logic
+│   └── SalesOrderManagement.Infrastructure/ # EF Core DbContext, repositories, migrations
+└── Frontend/                                # React application
 ```
 
-The application will open at `http://localhost:3000`
+## Prerequisites
 
-## Database Information
+- .NET 8 SDK
+- Node.js 18+ (LTS recommended)
+- PowerShell (Windows default)
 
-### Tables Created
-- **Clients** - Customer information with addresses
-- **Items** - Product catalog with codes, descriptions, and prices
-- **SalesOrders** - Sales order headers
-- **SalesOrderItems** - Sales order line items
+## Getting Started
 
-### Sample Data
-The application includes seed data:
-- 5 sample customers with addresses
-- 10 sample products with codes and prices
+### Backend (API)
 
-## API Endpoints
-
-### Clients
-- `GET /api/clients` - Get all clients
-- `GET /api/clients/{id}` - Get client by ID
-
-### Items  
-- `GET /api/items` - Get all items
-- `GET /api/items/{id}` - Get item by ID
-
-### Sales Orders
-- `GET /api/salesorders` - Get all sales orders
-- `GET /api/salesorders/{id}` - Get sales order by ID
-- `POST /api/salesorders` - Create new sales order
-- `PUT /api/salesorders/{id}` - Update sales order
-- `DELETE /api/salesorders/{id}` - Delete sales order
-- `GET /api/salesorders/generate-invoice-number` - Generate next invoice number
-
-## Usage Guide
-
-### Creating a New Sales Order
-
-1. **Start the Application**
-   - Open `http://localhost:3000` in your browser
-   - You'll see the Home screen with existing orders (if any)
-
-2. **Add New Order**
-   - Click the "Add New" button
-   - This opens the Sales Order Form
-
-3. **Fill Order Details**
-   - Select a customer from the dropdown
-   - Address fields will auto-populate
-   - Invoice number is auto-generated
-   - Set invoice date and add reference/notes as needed
-
-4. **Add Items**
-   - Click "Add Item" to create a new line
-   - Select item by code OR description (both dropdowns are linked)
-   - Enter quantity and tax rate
-   - Amounts are calculated automatically
-
-5. **Save Order**
-   - Click "Save Order" to create the sales order
-   - You'll be redirected to the Home screen
-
-### Editing an Existing Order
-
-1. **From Home Screen**
-   - Double-click on any row in the orders table
-   - This opens the order in edit mode
-
-2. **Make Changes**
-   - Modify any fields as needed
-   - Add/remove items
-   - Update quantities or tax rates
-
-3. **Save Changes**
-   - Click "Save Order" to update the order
-
-## Troubleshooting
-
-### Common Issues
-
-1. **"No .NET SDKs were found" Error**
-   - Download and install .NET 8.0 SDK
-   - Restart your terminal/command prompt
-
-2. **Database Connection Issues**
-   - Ensure SQL Server LocalDB is installed
-   - Check connection string in appsettings.json
-   - Try using SQL Server Express if LocalDB doesn't work
-
-3. **Frontend API Connection Issues**
-   - Ensure backend is running on the correct port
-   - Check if CORS is properly configured
-   - Verify the API URL in the frontend environment
-
-4. **Port Already in Use**
-   - Backend: Edit `launchSettings.json` to use different ports
-   - Frontend: Set `PORT=3001` in `.env` file to use port 3001
-
-### Running on Different Ports
-
-**Backend (API):**
 ```powershell
-# Run on specific port
-dotnet run --urls="https://localhost:7001;http://localhost:7000"
+# From repo root
+cd Backend/SalesOrderManagement.API
+
+# Restore and run
+dotnet restore
+dotnet run
 ```
 
-**Frontend:**
+- API runs on `http://localhost:5000` (Swagger enabled in Development)
+- Database file: `Backend/SalesOrderManagement.API/SalesOrderManagementDb.db`
+- Migrations are applied automatically at startup; seed data is added only if tables are empty
+
+Optional: change the connection string in `appsettings.json` (`DefaultConnection`) if you want to move the SQLite file.
+
+### Frontend (React)
+
 ```powershell
-# Set port in .env file
-echo "PORT=3001" > .env
+# From repo root
+cd Frontend
+
+npm install
 npm start
 ```
 
-## Development Notes
+- App runs on `http://localhost:3000`
+- By default, the frontend calls the API at `http://localhost:5000/api`
+- To override, create `Frontend/.env` with:
 
-### Architecture Highlights
-- **Clean Architecture** ensures separation of concerns
-- **Repository Pattern** for data access abstraction
-- **CQRS-like** approach with separate DTOs for commands and queries
-- **Dependency Injection** for loose coupling
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
 
-### Technology Stack
-- **Backend:** .NET 8, Entity Framework Core, SQL Server, AutoMapper
-- **Frontend:** React 18, Redux Toolkit, React Router, Tailwind CSS, Axios
-- **Database:** SQL Server with LocalDB support
+## Key Features
 
-### Future Enhancements
-- Add user authentication and authorization
-- Implement order status workflow
-- Add reporting and printing functionality
-- Include inventory management
-- Add email notifications
-- Implement order search and filtering
+- Customer dropdown with auto-filled address
+- Item selection by code or description
+- Per-line calculations: Excl, Tax, Incl
+- Order totals auto-calculated
+- Full CRUD for sales orders
 
-## Support
+## API Endpoints
 
-If you encounter any issues:
-1. Check the troubleshooting section above
-2. Ensure all prerequisites are installed
-3. Verify the environment configuration
-4. Check that both backend and frontend are running
+- Clients: `GET /api/clients`, `GET /api/clients/{id}`
+- Items: `GET /api/items`, `GET /api/items/{id}`
+- Sales Orders: `GET /api/salesorders`, `GET /api/salesorders/{id}`, `POST /api/salesorders`, `PUT /api/salesorders/{id}`, `DELETE /api/salesorders/{id}`
+
+## Data Persistence
+
+- Uses EF Core migrations with `context.Database.Migrate()` on startup
+- Seed data (5 clients, 10 items) is inserted only when tables are empty
+- The SQLite `.db` file is ignored by git (local-only)
+
+## Troubleshooting
+
+- Ports busy: change API URLs via `dotnet run --urls="http://localhost:7000"` or set `PORT=3001` for React
+- CORS: API allows `http://localhost:3000`
+- If the DB file is deleted, it will be recreated and seeded on next API start
+
+## Notes
+
+- The folder `how to/` contains design assets and is ignored by git
+- EF Core migrations are included under `Backend/SalesOrderManagement.Infrastructure/Migrations`
 
 ## License
 
-This project is for demonstration purposes as part of SPIL Labs assessment.#   s a l e s - o r d e r - m a n a g e m e n t  
- 
+This project is provided for technical assessment and demonstration purposes.

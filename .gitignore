@@ -53,3 +53,10 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Project docs and local artifacts
+# Ignore the design/how-to materials folder (contains images and brief)
+/how to/
+
+# SQLite database files created by the API (persist locally, not in git)
+/Backend/SalesOrderManagement.API/*.db
